@@ -20,12 +20,12 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
-    const [login, setLogin] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const postLogin = () => {
         setLoading(true);
-        fetch('login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ login, password }) })
+        fetch('login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
             .then((response) => response.json())
             .then(result => {
                 setLoading(false);
@@ -37,7 +37,7 @@ const Login = () => {
             <Paper elevation={3} className={classes.form}>
                 <Stack spacing={2}>
                     <Typography variant="h4">Login</Typography>
-                    <TextField id="login" label="Login" variant="outlined" onChange={(e) => { setLogin(e.target.value) }} />
+                    <TextField id="login" label="Login" variant="outlined" onChange={(e) => { setEmail(e.target.value) }} />
                     <TextField id="password" label="Password" variant="outlined" onChange={(e) => { setPassword(e.target.value) }} />
                     {!loading && <Button variant="outlined" onClick={postLogin}>Submit</Button>}
                     {loading && <CircularProgress />}
