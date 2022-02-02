@@ -1,13 +1,15 @@
-import { Schema, model, connect } from 'mongoose';
+import { Schema, model, connect, Types } from 'mongoose';
 
 interface IUser {
-    login: string;
+    email: string;
     password: string;
+    entities: string[]
 }
 
 const schema = new Schema<IUser>({
-    login: { type: String, required: true },
+    email: { type: String, required: true },
     password: { type: String, required: true },
+    entities: [{ type: Types.ObjectId, ref: 'Entity' }],
 });
 
 export default model<IUser>('User', schema);

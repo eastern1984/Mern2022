@@ -40,14 +40,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Entity_1 = __importDefault(require("../models/Entity"));
+var User_1 = __importDefault(require("../models/User"));
+var ENTITIES = [{ id: '1', name: 'Entity1' }, { id: '2', name: 'Entity2' }, { id: '3', name: 'Entity3' }, { id: '4', name: 'Entity4' },];
 exports.getEntities = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var entities;
+    var user, entities;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Entity_1.default.find()];
+            case 0: return [4 /*yield*/, User_1.default.findById(req.session.userId)];
             case 1:
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, res.json({ success: 'Error', message: 'No user' })];
+                }
+                return [4 /*yield*/, Entity_1.default.find({ _id: { "$in": user.entities } })];
+            case 2:
                 entities = _a.sent();
-                return [2 /*return*/, res.json({ success: 'OK', data: entities })];
+                return [2 /*return*/, res.json({ success: 'OK', data: ENTITIES, test: entities, userEntities: user.entities })];
         }
     });
 }); };

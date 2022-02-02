@@ -48,16 +48,36 @@ exports.postLogin = function (req, res, next) { return __awaiter(void 0, void 0,
             case 0:
                 email = req.body.email;
                 password = req.body.password;
-                return [4 /*yield*/, User_1.default.find({ email: { $eq: email } })];
+                return [4 /*yield*/, User_1.default.findOne({ email: email })];
             case 1:
                 docs = _a.sent();
                 if (!docs) {
-                    return [2 /*return*/, res.json({ success: 'Error', message: 'No user' })];
+                    return [2 /*return*/, res.json({ error: 'Error', message: 'No user' })];
                 }
-                if (md5_1.default(password) === docs[0].password) {
+                if (md5_1.default(password) === docs.password) {
+                    req.session.isLoggedIn = true;
+                    req.session.userId = docs._id.toString();
+                    req.session.email = docs.email;
                     return [2 /*return*/, res.json({ success: 'OK', docs: docs })];
                 }
-                return [2 /*return*/, res.json({ success: 'Error', message: 'Wrong password' })];
+                return [2 /*return*/, res.json({ error: 'Error', message: 'Wrong password' })];
         }
+    });
+}); };
+exports.postLogout = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        console.log(123);
+        req.session.destroy(function (err) {
+            return res.json({ success: 'OK', err: err });
+        });
+        return [2 /*return*/];
+    });
+}); };
+exports.isAuth = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        if (req.session.isLoggedIn) {
+            return [2 /*return*/, res.json({ success: 'OK', email: req.session.email })];
+        }
+        return [2 /*return*/, res.json({ success: 'OK', email: '' })];
     });
 }); };

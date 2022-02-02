@@ -6,8 +6,6 @@ import Paper from '@mui/material/Paper';
 import { Grid, Typography, Stack, CircularProgress } from '@mui/material';
 import { IEntity } from '../../types/interfaces';
 
-const ENTITIES = [{ id: '1', name: 'Entity1' }, { id: '2', name: 'Entity2' }, { id: '3', name: 'Entity3' }, { id: '4', name: 'Entity4' },];
-
 const useStyles = makeStyles((theme) => ({
     root: {
         padding: '16px',
@@ -25,14 +23,17 @@ const useStyles = makeStyles((theme) => ({
 const ChooseEntity = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
-    const [entities, setEntities] = useState<IEntity[]>(ENTITIES);
+    const [entities, setEntities] = useState<IEntity[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
-        fetch('/entities').then(response => response.json).then((result) => {
-            setLoading(false);
-        })
+        fetch('/api/entities')
+            .then(response => response.json())
+            .then((result => {
+                setLoading(false);
+                setEntities(result.data || []);
+            }))
     }, []);
 
     return (
@@ -40,7 +41,7 @@ const ChooseEntity = () => {
             <Stack spacing={2}>
                 <Grid container spacing={2}>
                     {loading && <CircularProgress />}
-                    {!loading && ENTITIES.map((entity) =>
+                    {!loading && entities.map((entity) =>
                         <Grid item xs={6} md={3} key={entity.name}>
                             <Paper elevation={3} className={classes.entity} onClick={() => navigate('/list/' + entity.id)}>
                                 <Typography variant="h4">{entity.name}</Typography>
