@@ -16,6 +16,7 @@ exports.router = router;
 router.post('/login', Auth_1.postLogin);
 router.get('/isAuth', Auth_1.isAuth);
 router.get('/entities', Entity_1.getEntities);
+router.get('/entity/:id', Entity_1.getEntity);
 router.post('/logout', Auth_1.postLogout);
 router.get('/protected', requireAuth, function (req, res) {
     res.send('Welcome to protected route, logged in user');

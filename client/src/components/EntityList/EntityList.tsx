@@ -16,24 +16,25 @@ const useStyles = makeStyles((theme) => ({
 const EntityView = () => {
     const classes = useStyles();
     const navigate = useNavigate();
-    let { type } = useParams();
+    let { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState<IEntity | null>(null);
 
     useEffect(() => {
         setLoading(true);
-        fetch('/entityDetails/' + type).then(response => response.json).then((result) => {
+        fetch('/api/entity/' + id).then(response => response.json()).then((result) => {
             setLoading(false);
+            setEntity(result.data);
         })
     }, []);
 
     return (
         <Box className={classes.root}>
-            <Typography variant="h4">Entity {type}</Typography>
+            <Typography variant="h4">{entity?.name}</Typography>
             {loading && <CircularProgress />}
             <Stack spacing={2}>
                 <Button variant="outlined" onClick={() => navigate('/view/')}>Создать</Button>
-                <Button variant="outlined" onClick={() => navigate('/view/' + type)}>Редактировать</Button>
+                <Button variant="outlined" onClick={() => navigate('/view/' + id)}>Редактировать</Button>
                 <Button variant="outlined" onClick={() => null}>Отмена</Button>
             </Stack>
         </Box>

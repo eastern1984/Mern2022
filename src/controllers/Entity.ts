@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import Entity from '../models/Entity';
 import User from '../models/User';
 
-const ENTITIES = [{ id: '1', name: 'Entity1' }, { id: '2', name: 'Entity2' }, { id: '3', name: 'Entity3' }, { id: '4', name: 'Entity4' },];
-
 export const getEntities = async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.session.userId);
 
@@ -12,11 +10,12 @@ export const getEntities = async (req: Request, res: Response, next: NextFunctio
     }
 
     const entities = await Entity.find({ _id: { "$in": user.entities } });
-    return res.json({ success: 'OK', data: ENTITIES, test: entities, userEntities: user.entities });
+    return res.json({ success: 'OK', data: entities });
 }
 
 export const getEntity = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.body.id;
+    const id = req.params.id;
+
     const entity = await Entity.findById(id);
     return res.json({ success: 'OK', data: entity });
 }

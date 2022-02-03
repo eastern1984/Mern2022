@@ -8,7 +8,7 @@ export interface IMethod {
 }
 
 export interface IEntity {
-    id: string;
+    _id: string;
     name: string;
     description?: string;
     methods?: IMethod[];

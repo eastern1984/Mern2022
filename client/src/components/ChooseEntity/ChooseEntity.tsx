@@ -43,7 +43,7 @@ const ChooseEntity = () => {
                     {loading && <CircularProgress />}
                     {!loading && entities.map((entity) =>
                         <Grid item xs={6} md={3} key={entity.name}>
-                            <Paper elevation={3} className={classes.entity} onClick={() => navigate('/list/' + entity.id)}>
+                            <Paper elevation={3} className={classes.entity} onClick={() => navigate('/list/' + entity._id)}>
                                 <Typography variant="h4">{entity.name}</Typography>
                             </Paper>
                         </Grid>

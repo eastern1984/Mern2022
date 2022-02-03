@@ -41,7 +41,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Entity_1 = __importDefault(require("../models/Entity"));
 var User_1 = __importDefault(require("../models/User"));
-var ENTITIES = [{ id: '1', name: 'Entity1' }, { id: '2', name: 'Entity2' }, { id: '3', name: 'Entity3' }, { id: '4', name: 'Entity4' },];
 exports.getEntities = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var user, entities;
     return __generator(this, function (_a) {
@@ -55,7 +54,7 @@ exports.getEntities = function (req, res, next) { return __awaiter(void 0, void 
                 return [4 /*yield*/, Entity_1.default.find({ _id: { "$in": user.entities } })];
             case 2:
                 entities = _a.sent();
-                return [2 /*return*/, res.json({ success: 'OK', data: ENTITIES, test: entities, userEntities: user.entities })];
+                return [2 /*return*/, res.json({ success: 'OK', data: entities })];
         }
     });
 }); };
@@ -64,7 +63,7 @@ exports.getEntity = function (req, res, next) { return __awaiter(void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                id = req.body.id;
+                id = req.params.id;
                 return [4 /*yield*/, Entity_1.default.findById(id)];
             case 1:
                 entity = _a.sent();

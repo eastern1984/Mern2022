@@ -25,7 +25,7 @@ function App() {
             element={<Navigate to="/" />}
           />}
           <Route path="/entities" element={<ChooseEntity />} />
-          <Route path="/list/:type" element={<EntityList />} />
+          <Route path="/list/:id" element={<EntityList />} />
           <Route path="/view/:id" element={<EntityView />} />
         </Routes>
       </Layout >

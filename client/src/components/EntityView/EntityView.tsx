@@ -18,7 +18,7 @@ const ChooseEntity = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch('/entityDetails/' + type).then(response => response.json).then((result) => {
+        fetch('/api/entityDetails/' + type).then(response => response.json).then((result) => {
             setLoading(false);
         })
     }, []);
