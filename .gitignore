@@ -1,3 +1,5 @@
+nats/
+
 # Logs
 logs
 *.log

@@ -1,5 +1,7 @@
+export enum METHOD_TYPES { GET, POST }
+
 export interface IMethod {
-    id: string;
+    type: number;
     active: boolean;
     subscriptionName: string;
     filterSchema: { [key: string]: string };
@@ -10,8 +12,8 @@ export interface IMethod {
 export interface IEntity {
     _id: string;
     name: string;
-    description?: string;
-    methods?: IMethod[];
+    description: string;
+    methods: IMethod[]
 }
 
 export interface IUser {
