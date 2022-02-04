@@ -15,11 +15,21 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const isJSON = (str: string) => {
+    try {
+        return (JSON.parse(str) && !!str);
+    } catch (e) {
+        return false;
+    }
+}
+
 const ChooseEntity = () => {
     const classes = useStyles();
     let { id } = useParams();
     const [loading, setLoading] = useState(false);
-    const [fields, setFields] = useState<any>([]);
+    const [fields, setFields] = useState<any>(null);
+
+    const postFilter = () => fetch('/api/postEntity', { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: JSON.parse(fields), id }) })
 
     useEffect(() => {
         setLoading(true);
@@ -27,7 +37,7 @@ const ChooseEntity = () => {
             setLoading(false);
         })
     }, []);
-    console.log(fields);
+
     return (
         <Box className={classes.root}>
             <Typography variant="h4">Entity {id}</Typography>
@@ -36,24 +46,22 @@ const ChooseEntity = () => {
                 <Paper className={classes.form} elevation={2}>
                     <Stack spacing={2} alignItems="flex-start">
                         <Typography variant="h4">Поля сущности</Typography>
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <Button variant="contained" onClick={() => { setFields([...fields, ['Название', 'string']]); }}>Текстовое поле</Button>
-                            <Button variant="contained" onClick={() => { setFields([...fields, ['Название', 'boolean']]); }}>Флажок</Button>
-                        </Stack>
-                        {fields.map((field: [string, string], index: number) => {
-                            let newField;
-                            switch (field[1]) {
-                                case 'string': { newField = (<TextField label={""} disabled />); break; }
-                                case 'boolean': { newField = (<FormControlLabel control={<Checkbox disabled />} label={""} />); break; }
-                            }
-                            return (
-                                <Stack direction="row" spacing={2} alignItems="center">
-                                    <TextField label={"Название"} value={fields[index][0]} onChange={(e) => { fields[index][0] = e.target.value; setFields([...fields]) }} />
-                                    {newField}
-                                </Stack>
-                            );
-                        })}
-                        <Button variant="outlined" onClick={() => null}>Отправить</Button>
+                        <TextField label={"Объект"} multiline onChange={(e) => setFields(e.target.value)} rows={5} />
+                        {!isJSON(fields) && <Typography>Введите JSON объект</Typography>}
+                        {isJSON(fields) &&
+                            <Stack spacing={2}>
+                                <Typography>Результат:</Typography>
+                                {Object.entries(JSON.parse(fields)).map((field) => {
+                                    switch (typeof field[1]) {
+                                        case 'number': return (<TextField label={field[0]} disabled type="number" />);
+                                        case 'string': return (<TextField label={field[0]} disabled />);
+                                        case 'boolean': return (<FormControlLabel control={<Checkbox disabled />} label={field[0]} />);
+                                    }
+                                })
+                                }
+                            </Stack>
+                        }
+                        <Button variant="outlined" onClick={() => postFilter()} disabled={!(isJSON(fields) && (Object.entries(JSON.parse(fields)).length > 0))} >Отправить</Button>
                     </Stack>
                 </Paper>
             }

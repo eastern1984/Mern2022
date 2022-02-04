@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import Entity from '../models/Entity';
+import Entity, { IMethod } from '../models/Entity';
 import User from '../models/User';
+
+export enum METHOD_TYPES { GET, POST }
 
 export const getEntities = async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.session.userId);
@@ -22,10 +24,34 @@ export const getEntity = async (req: Request, res: Response, next: NextFunction)
 
 export const postEntity = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.body.id;
-    const data = req.body.data;
+    const fields = req.body.fields;
     const entity = await Entity.findById(id);
 
-    await entity?.save();
+    const newFilterSchema: IMethod = {
+        type: METHOD_TYPES.GET,
+        filterSchema: fields,
+        active: true,
+        responseSchema: {},
+        subscriptionBody: {},
+        subscriptionName: 'get'
+    };
 
-    return res.json({ success: 'OK' });
+    if (!entity) {
+        return res.json({ success: 'Error' });
+    }
+    const methods = entity.methods;
+    if (methods.filter(v => v.type === METHOD_TYPES.GET).length > 0) {
+        entity.methods = methods.map(v => {
+            if (v.type === METHOD_TYPES.GET) {
+                v.filterSchema = fields;
+            }
+            return v;
+        });
+    } else {
+        entity.methods = entity.methods ? [...entity.methods, newFilterSchema] : [newFilterSchema];
+    }
+
+    await entity.save();
+
+    return res.json({ success: 'OK', entity });
 }

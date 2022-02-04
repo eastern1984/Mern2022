@@ -39,48 +39,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAuth = exports.postLogout = exports.postLogin = void 0;
+var Entity_1 = __importDefault(require("../models/Entity"));
 var User_1 = __importDefault(require("../models/User"));
-var md5_1 = __importDefault(require("md5"));
-var postLogin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, docs;
+var interfaces_1 = require("../../client/src/types/interfaces");
+exports.getEntities = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, entities;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, User_1.default.findById(req.session.userId)];
+            case 1:
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, res.json({ success: 'Error', message: 'No user' })];
+                }
+                return [4 /*yield*/, Entity_1.default.find({ _id: { "$in": user.entities } })];
+            case 2:
+                entities = _a.sent();
+                return [2 /*return*/, res.json({ success: 'OK', data: entities })];
+        }
+    });
+}); };
+exports.getEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, entity;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                email = req.body.email;
-                password = req.body.password;
-                return [4 /*yield*/, User_1.default.findOne({ email: email })];
+                id = req.params.id;
+                return [4 /*yield*/, Entity_1.default.findById(id)];
             case 1:
-                docs = _a.sent();
-                if (!docs) {
-                    return [2 /*return*/, res.json({ error: 'Error', message: 'No user' })];
-                }
-                if ((0, md5_1.default)(password) === docs.password) {
-                    req.session.isLoggedIn = true;
-                    req.session.userId = docs._id.toString();
-                    req.session.email = docs.email;
-                    return [2 /*return*/, res.json({ success: 'OK', docs: docs })];
-                }
-                return [2 /*return*/, res.json({ error: 'Error', message: 'Wrong password' })];
+                entity = _a.sent();
+                return [2 /*return*/, res.json({ success: 'OK', data: entity })];
         }
     });
 }); };
-exports.postLogin = postLogin;
-var postLogout = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+exports.postEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, fields, entity, methods;
     return __generator(this, function (_a) {
-        req.session.destroy(function (err) {
-            return res.json({ success: 'OK', err: err });
-        });
-        return [2 /*return*/];
-    });
-}); };
-exports.postLogout = postLogout;
-var isAuth = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        if (req.session.isLoggedIn) {
-            return [2 /*return*/, res.json({ success: 'OK', email: req.session.email })];
+        switch (_a.label) {
+            case 0:
+                id = req.body.id;
+                fields = req.body.fields;
+                return [4 /*yield*/, Entity_1.default.findById(id)];
+            case 1:
+                entity = _a.sent();
+                if (!entity) {
+                    return [2 /*return*/, res.json({ success: 'Error' })];
+                }
+                methods = entity.methods;
+                if (methods.filter(function (v) { return v.type === interfaces_1.METHOD_TYPES.GET; }))
+                    entity.
+                    ;
+                return [4 /*yield*/, (entity === null || entity === void 0 ? void 0 : entity.save())];
+            case 2:
+                _a.sent();
+                return [2 /*return*/, res.json({ success: 'OK' })];
         }
-        return [2 /*return*/, res.json({ success: 'OK', email: '' })];
     });
 }); };
-exports.isAuth = isAuth;

@@ -6,4 +6,4 @@ var schema = new mongoose_1.Schema({
     password: { type: String, required: true },
     entities: [{ type: mongoose_1.Types.ObjectId, ref: 'Entity' }],
 });
-exports.default = mongoose_1.model('User', schema);
+exports.default = (0, mongoose_1.model)('User', schema);

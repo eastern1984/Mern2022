@@ -1,7 +1,7 @@
 import { Schema, model, connect } from 'mongoose';
 
 export interface IMethod {
-    type: string;
+    type: number;
     active: boolean;
     subscriptionName: string;
     filterSchema: { [key: string]: string };

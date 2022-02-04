@@ -26,4 +26,4 @@ var schema = new mongoose_1.Schema({
     description: { type: String, required: true },
     methods: [methodSchema],
 });
-exports.default = mongoose_1.model('Entity', schema);
+exports.default = (0, mongoose_1.model)('Entity', schema);

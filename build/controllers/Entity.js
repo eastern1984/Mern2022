@@ -35,13 +35,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.postEntity = exports.getEntity = exports.getEntities = exports.METHOD_TYPES = void 0;
 var Entity_1 = __importDefault(require("../models/Entity"));
 var User_1 = __importDefault(require("../models/User"));
-exports.getEntities = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var METHOD_TYPES;
+(function (METHOD_TYPES) {
+    METHOD_TYPES[METHOD_TYPES["GET"] = 0] = "GET";
+    METHOD_TYPES[METHOD_TYPES["POST"] = 1] = "POST";
+})(METHOD_TYPES = exports.METHOD_TYPES || (exports.METHOD_TYPES = {}));
+var getEntities = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var user, entities;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -58,7 +73,8 @@ exports.getEntities = function (req, res, next) { return __awaiter(void 0, void 
         }
     });
 }); };
-exports.getEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getEntities = getEntities;
+var getEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var id, entity;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -71,20 +87,45 @@ exports.getEntity = function (req, res, next) { return __awaiter(void 0, void 0,
         }
     });
 }); };
-exports.postEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, data, entity;
+exports.getEntity = getEntity;
+var postEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, fields, entity, newFilterSchema, methods;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 id = req.body.id;
-                data = req.body.data;
+                fields = req.body.fields;
                 return [4 /*yield*/, Entity_1.default.findById(id)];
             case 1:
                 entity = _a.sent();
-                return [4 /*yield*/, (entity === null || entity === void 0 ? void 0 : entity.save())];
+                newFilterSchema = {
+                    type: METHOD_TYPES.GET,
+                    filterSchema: fields,
+                    active: true,
+                    responseSchema: {},
+                    subscriptionBody: {},
+                    subscriptionName: 'get'
+                };
+                if (!entity) {
+                    return [2 /*return*/, res.json({ success: 'Error' })];
+                }
+                methods = entity.methods;
+                if (methods.filter(function (v) { return v.type === METHOD_TYPES.GET; }).length > 0) {
+                    entity.methods = methods.map(function (v) {
+                        if (v.type === METHOD_TYPES.GET) {
+                            v.filterSchema = fields;
+                        }
+                        return v;
+                    });
+                }
+                else {
+                    entity.methods = entity.methods ? __spreadArray(__spreadArray([], entity.methods, true), [newFilterSchema], false) : [newFilterSchema];
+                }
+                return [4 /*yield*/, entity.save()];
             case 2:
                 _a.sent();
-                return [2 /*return*/, res.json({ success: 'OK' })];
+                return [2 /*return*/, res.json({ success: 'OK', entity: entity })];
         }
     });
 }); };
+exports.postEntity = postEntity;

@@ -27,7 +27,6 @@ export const postLogin = async (req: Request, res: Response, next: NextFunction)
 }
 
 export const postLogout = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(123);
     req.session.destroy(err => {
         return res.json({ success: 'OK', err: err });
     });

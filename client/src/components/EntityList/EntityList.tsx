@@ -73,7 +73,7 @@ const EntityView = () => {
 
                                 <Typography variant="h4">Фильтр</Typography>
                                 {Object.entries(filter).map(field => {
-                                    switch (field[1]) {
+                                    switch (typeof field[1]) {
                                         case 'string': return <TextField label={field[0]} value={filterData && filterData.hasOwnProperty(field[0]) && filterData[field[0]]} onChange={(e) => setFilterData({ ...filterData, [field[0]]: e.target.value })} />
                                         case 'boolean': return <FormControlLabel control={<Checkbox checked={filterData && filterData.hasOwnProperty(field[0]) && filterData[field[0]]} onChange={(e) => setFilterData({ ...filterData, [field[0]]: e.target.checked })} />} label={field[0]} />
                                     }

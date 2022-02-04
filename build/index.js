@@ -14,13 +14,13 @@ var connect_flash_1 = __importDefault(require("connect-flash"));
 var express_session_2 = __importDefault(require("express-session"));
 var MONGODB_URI = 'mongodb://localhost:27017/omnitec';
 var PORT = 3000;
-var app = express_1.default();
-var MongoDBStore = connect_mongodb_session_1.default(express_session_2.default);
+var app = (0, express_1.default)();
+var MongoDBStore = (0, connect_mongodb_session_1.default)(express_session_2.default);
 var store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: 'sessions'
 });
-app.use(express_session_1.default({ secret: 'my secret string', resave: false, saveUninitialized: false, store: store })).use(connect_flash_1.default());
+app.use((0, express_session_1.default)({ secret: 'my secret string', resave: false, saveUninitialized: false, store: store })).use((0, connect_flash_1.default)());
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use('/api', loginRoutes_1.router);
