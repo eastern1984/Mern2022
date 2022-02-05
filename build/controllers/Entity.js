@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -48,9 +59,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postEntity = exports.getEntity = exports.getEntities = exports.METHOD_TYPES = void 0;
+exports.postEntity = exports.postGetFilters = exports.getEntity = exports.getEntities = exports.METHOD_TYPES = void 0;
 var Entity_1 = __importDefault(require("../models/Entity"));
 var User_1 = __importDefault(require("../models/User"));
+var nats_1 = require("../utils/nats");
 var METHOD_TYPES;
 (function (METHOD_TYPES) {
     METHOD_TYPES[METHOD_TYPES["GET"] = 0] = "GET";
@@ -88,6 +100,20 @@ var getEntity = function (req, res, next) { return __awaiter(void 0, void 0, voi
     });
 }); };
 exports.getEntity = getEntity;
+var postGetFilters = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var fields, natsResult;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                fields = req.body;
+                return [4 /*yield*/, (0, nats_1.getNatsData)('Get filter', fields)];
+            case 1:
+                natsResult = _a.sent();
+                return [2 /*return*/, res.json({ success: 'OK', data: __assign({}, natsResult) })];
+        }
+    });
+}); };
+exports.postGetFilters = postGetFilters;
 var postEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var id, fields, entity, newFilterSchema, methods;
     return __generator(this, function (_a) {

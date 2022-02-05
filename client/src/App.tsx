@@ -8,8 +8,8 @@ import {
 import Login from './components/Login/Login';
 import ChooseEntity from './components/ChooseEntity/ChooseEntity';
 import EntityList from './components/EntityList/EntityList';
-import EntityView from './components/EntityView/EntityView';
 import { EmailContext, Layout } from './components/hoc/Layout';
+import EntityFilter from './components/EntityView/EntityFilter';
 
 function App() {
   const { email } = useContext(EmailContext);
@@ -26,7 +26,7 @@ function App() {
           />}
           <Route path="/entities" element={<ChooseEntity />} />
           <Route path="/list/:id" element={<EntityList />} />
-          <Route path="/view/:id" element={<EntityView />} />
+          <Route path="/filterForm/:id" element={<EntityFilter />} />
         </Routes>
       </Layout >
     </BrowserRouter>

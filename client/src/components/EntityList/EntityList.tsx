@@ -37,7 +37,7 @@ const EntityView = () => {
     const sendGetWithFilters = (body: any) => {
         setLoading(true);
         setFilter(null);
-        fetch('/api/send-get-filters', { method: 'POST', body: JSON.stringify(body) })
+        fetch('/api/send-get-filters', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
             .then(response => response.json())
             .then(result => {
                 setResponseForGet(result.data);
@@ -74,12 +74,16 @@ const EntityView = () => {
                                 <Typography variant="h4">Фильтр</Typography>
                                 {Object.entries(filter).map(field => {
                                     switch (typeof field[1]) {
-                                        case 'string': return <TextField label={field[0]} value={filterData && filterData.hasOwnProperty(field[0]) && filterData[field[0]]} onChange={(e) => setFilterData({ ...filterData, [field[0]]: e.target.value })} />
+                                        case 'string': return <TextField label={field[0]} value={filterData && filterData.hasOwnProperty(field[0]) && filterData[field[0]] || ''} onChange={(e) => setFilterData({ ...filterData, [field[0]]: e.target.value })} />
+                                        case 'number': return <TextField type="number" label={field[0]} value={filterData && filterData.hasOwnProperty(field[0]) && filterData[field[0]]} onChange={(e) => setFilterData({ ...filterData, [field[0]]: e.target.value })} />
                                         case 'boolean': return <FormControlLabel control={<Checkbox checked={filterData && filterData.hasOwnProperty(field[0]) && filterData[field[0]]} onChange={(e) => setFilterData({ ...filterData, [field[0]]: e.target.checked })} />} label={field[0]} />
                                     }
-                                    return <div>{field}</div>;
+                                    return <div>Unknown type - {typeof field[1]}</div>;
                                 })}
-                                <Button variant="outlined" onClick={() => sendGetWithFilters(filterData)}>Отправить</Button>
+                                <Stack direction="row" spacing={2} justifyContent="space-between">
+                                    <Button variant="outlined" onClick={() => sendGetWithFilters(filterData)}>Отправить</Button>
+                                    <Button color="secondary" variant="contained" onClick={() => navigate('/filterForm/' + id)}>Редактирование</Button>
+                                </Stack>
                             </Stack>
                         </Paper>
                     }
@@ -87,7 +91,7 @@ const EntityView = () => {
                         <Stack spacing={2}>
                             <Typography>Объект не найден</Typography>
                             <Stack direction="row" spacing={2}>
-                                <Button variant="outlined" onClick={() => navigate('/view/' + id)}>Создать</Button>
+                                <Button variant="outlined" onClick={() => navigate('/filterForm/' + id)}>Создать</Button>
                                 <Button variant="outlined" onClick={() => navigate('/entities')}>Отмена</Button>
                             </Stack>
                         </Stack>

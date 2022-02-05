@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import { CircularProgress, Typography, Button, Stack, Paper, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import { IMethod, METHOD_TYPES } from '../../types/interfaces';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,19 +24,23 @@ const isJSON = (str: string) => {
     }
 }
 
-const ChooseEntity = () => {
+const EntityFilter = () => {
     const classes = useStyles();
     let { id } = useParams();
     const [loading, setLoading] = useState(false);
-    const [fields, setFields] = useState<any>(null);
+    const [fields, setFields] = useState<any>('');
 
     const postFilter = () => fetch('/api/postEntity', { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: JSON.parse(fields), id }) })
 
     useEffect(() => {
         setLoading(true);
-        fetch('/api/entityDetails/' + id).then(response => response.json).then((result) => {
-            setLoading(false);
-        })
+        fetch('/api/entity/' + id)
+            .then(response => response.json())
+            .then((result) => {
+                const filterSchema = result.data?.methods.filter((v: IMethod) => v.type === METHOD_TYPES.GET)[0]?.filterSchema;
+                setLoading(false);
+                setFields(filterSchema ? JSON.stringify(filterSchema) : '');
+            })
     }, []);
 
     return (
@@ -46,7 +51,7 @@ const ChooseEntity = () => {
                 <Paper className={classes.form} elevation={2}>
                     <Stack spacing={2} alignItems="flex-start">
                         <Typography variant="h4">Поля сущности</Typography>
-                        <TextField label={"Объект"} multiline onChange={(e) => setFields(e.target.value)} rows={5} />
+                        <TextField label={"Объект"} multiline onChange={(e) => setFields(e.target.value)} rows={5} value={fields} />
                         {!isJSON(fields) && <Typography>Введите JSON объект</Typography>}
                         {isJSON(fields) &&
                             <Stack spacing={2}>
@@ -69,4 +74,4 @@ const ChooseEntity = () => {
     );
 };
 
-export default ChooseEntity;
+export default EntityFilter;

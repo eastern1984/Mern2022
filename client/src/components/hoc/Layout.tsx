@@ -5,7 +5,8 @@ import {
     AppBar,
     Button,
     Stack,
-    Typography
+    Typography,
+    CircularProgress
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
@@ -26,14 +27,18 @@ export const Layout = ({ children }: Props) => {
     const classes = useStyles();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(true);
     const context = { email, setContextEmail: setEmail };
 
     useEffect(() => {
         fetch('/api/isAuth')
             .then(response => response.json())
             .then(result => {
+                setLoading(false);
                 setEmail(result.email);
-                navigate('/');
+                if (!result.email) {
+                    navigate('/');
+                }
             });
     }, [])
 
@@ -58,9 +63,12 @@ export const Layout = ({ children }: Props) => {
                     </Stack>
                 </Toolbar>
             </AppBar>
-            <EmailContext.Provider value={context}>
-                {children}
-            </EmailContext.Provider>
+            {loading && <CircularProgress />}
+            {!loading &&
+                < EmailContext.Provider value={context}>
+                    {children}
+                </EmailContext.Provider>
+            }
         </Box >
     );
 }

@@ -1,6 +1,6 @@
 import { Router, Request as ExpressRequest, Response, NextFunction } from 'express';
 import { isAuth, postLogin, postLogout } from '../controllers/Auth';
-import { getEntities, getEntity, postEntity } from '../controllers/Entity';
+import { getEntities, getEntity, postEntity, postGetFilters } from '../controllers/Entity';
 
 export interface Request extends ExpressRequest {
   session: any;
@@ -20,6 +20,7 @@ const router = Router();
 
 router.post('/login', postLogin);
 router.post('/postEntity', postEntity);
+router.post('/send-get-filters', postGetFilters);
 router.get('/isAuth', isAuth);
 router.get('/entities', getEntities);
 router.get('/entity/:id', getEntity);

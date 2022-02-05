@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Entity, { IMethod } from '../models/Entity';
 import User from '../models/User';
+import { getNatsData } from '../utils/nats';
 
 export enum METHOD_TYPES { GET, POST }
 
@@ -20,6 +21,12 @@ export const getEntity = async (req: Request, res: Response, next: NextFunction)
 
     const entity = await Entity.findById(id);
     return res.json({ success: 'OK', data: entity });
+}
+
+export const postGetFilters = async (req: Request, res: Response, next: NextFunction) => {
+    const fields = req.body;
+    const natsResult = await getNatsData('Get filter', fields);
+    return res.json({ success: 'OK', data: { ...natsResult } });
 }
 
 export const postEntity = async (req: Request, res: Response, next: NextFunction) => {
