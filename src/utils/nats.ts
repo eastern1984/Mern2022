@@ -18,6 +18,6 @@ export const natsConnect = async () => {
         let nc = await connect({ servers: [process.env.NATS_CONNECTION || ""] });
         console.log("NATS connected", nc);
     } catch (ex) {
-        console.log("NATS connect error");
+        console.log("NATS init connect error");
     }
 }

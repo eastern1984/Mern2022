@@ -72,7 +72,7 @@ var natsConnect = function () { return __awaiter(void 0, void 0, void 0, functio
                 return [3 /*break*/, 3];
             case 2:
                 ex_2 = _a.sent();
-                console.log("NATS connect error");
+                console.log("NATS init connect error");
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
