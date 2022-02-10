@@ -25,11 +25,7 @@ router.post('/send-get-filters', postGetFilters);
 router.get('/isAuth', isAuth);
 router.get('/entities', getEntities);
 router.get('/entity/:id', getEntity);
-
 router.post('/logout', postLogout);
 
-router.get('/protected', requireAuth, (req: Request, res: Response) => {
-  res.send('Welcome to protected route, logged in user');
-});
 
 export { router };

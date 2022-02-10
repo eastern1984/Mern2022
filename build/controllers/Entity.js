@@ -70,7 +70,7 @@ var getEntities = function (req, res, next) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, Entity_1.default.find({ _id: { "$in": user.entities } })];
             case 2:
                 entities = _a.sent();
-                return [2 /*return*/, res.json({ success: 'OK', data: entities })];
+                return [2 /*return*/, res.json({ success: 'OK', data: entities, "test": process.env.test })];
         }
     });
 }); };

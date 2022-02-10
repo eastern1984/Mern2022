@@ -1,5 +1,5 @@
 import path from 'path';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { router } from './routes/loginRoutes';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -9,6 +9,9 @@ import flash from 'connect-flash';
 import session from 'express-session';
 import User from './models/User';
 import { natsConnect } from './utils/nats';
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: './.env' });
 
 declare module 'express-session' {
   interface SessionData {
@@ -16,8 +19,8 @@ declare module 'express-session' {
   }
 }
 
-const MONGODB_URI = 'mongodb://localhost:27017/omnitec';
-const PORT = 3000;
+const MONGODB_URI = process.env.MONGO_DB_CONNECTION || "";
+const PORT = process.env.SERVER_PORT;
 
 const app = express();
 
@@ -29,13 +32,13 @@ const store = new MongoDBStore({
 });
 
 app.use(
-  ExpressSession({ secret: 'my secret string', resave: false, saveUninitialized: false, store: store })
+  ExpressSession({ secret: process.env.SECRET_SESSION_STRING || "", resave: false, saveUninitialized: false, store: store })
 ).use(flash());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/api', router);
+app.use(process.env.API_URL || "", router);
 
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.get('*', (req, res) => {
@@ -49,7 +52,7 @@ mongoose.connect(MONGODB_URI).then(result => {
     console.log('Listening on port 3000 ');
   });
 }).catch(err => {
-  console.log('321Mongo connect error', err);
+  console.log('Mongo connect error', err);
 });
 
 

@@ -13,7 +13,7 @@ export const getEntities = async (req: Request, res: Response, next: NextFunctio
     }
 
     const entities = await Entity.find({ _id: { "$in": user.entities } });
-    return res.json({ success: 'OK', data: entities });
+    return res.json({ success: 'OK', data: entities, "test": process.env.test });
 }
 
 export const getEntity = async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +52,7 @@ export const postObjects = async (req: Request, res: Response, next: NextFunctio
     if (!postMethod) {
         return res.json({ success: 'Error', message: 'No post method' });
     }
-    
+
     const objects = req.body.objects;
     const result = await getNatsData(postMethod.subscriptionName, objects);
     return res.json({ success: 'OK', data: result });

@@ -21,11 +21,13 @@
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^3.1.1",
     "cookie-session": "^1.4.0",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "md5": "^2.3.0",
     "mongoose": "^6.1.9",
-    "tasu": "^5.0.0"
+    "tasu": "^5.0.0",
+    "ts-nats": "^1.2.15"
   },
   "devDependencies": {
     "@types/connect-flash": "^0.0.37",
