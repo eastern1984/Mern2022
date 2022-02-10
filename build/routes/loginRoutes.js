@@ -14,6 +14,7 @@ function requireAuth(req, res, next) {
 }
 var router = (0, express_1.Router)();
 exports.router = router;
+router.post('/post-objects', Entity_1.postObjects);
 router.post('/login', Auth_1.postLogin);
 router.post('/postEntity', Entity_1.postEntity);
 router.post('/send-get-filters', Entity_1.postGetFilters);

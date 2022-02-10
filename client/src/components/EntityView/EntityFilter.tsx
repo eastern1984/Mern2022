@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import { CircularProgress, Typography, Button, Stack, Paper, TextField, Checkbox, FormControlLabel } from '@mui/material';
@@ -27,10 +27,24 @@ const isJSON = (str: string) => {
 const EntityFilter = () => {
     const classes = useStyles();
     let { id } = useParams();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [fields, setFields] = useState<any>('');
 
-    const postFilter = () => fetch('/api/postEntity', { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: JSON.parse(fields), id }) })
+    const postFilter = () => {
+        setLoading(true);
+        fetch(
+            '/api/postEntity',
+            {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields: JSON.parse(fields), id })
+            })
+            .then(response => response.json())
+            .then((result) => {
+                navigate('/entities');
+            })
+    }
 
     useEffect(() => {
         setLoading(true);

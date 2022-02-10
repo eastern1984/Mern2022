@@ -24,7 +24,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "md5": "^2.3.0",
-    "mongoose": "^6.1.9"
+    "mongoose": "^6.1.9",
+    "tasu": "^5.0.0"
   },
   "devDependencies": {
     "@types/connect-flash": "^0.0.37",

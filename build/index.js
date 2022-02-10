@@ -12,6 +12,7 @@ var connect_mongodb_session_1 = __importDefault(require("connect-mongodb-session
 var express_session_1 = __importDefault(require("express-session"));
 var connect_flash_1 = __importDefault(require("connect-flash"));
 var express_session_2 = __importDefault(require("express-session"));
+var nats_1 = require("./utils/nats");
 var MONGODB_URI = 'mongodb://localhost:27017/omnitec';
 var PORT = 3000;
 var app = (0, express_1.default)();
@@ -28,6 +29,7 @@ app.use(express_1.default.static(path_1.default.join(__dirname, '..', 'client', 
 app.get('*', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, '..', 'client', 'build', 'index.html'));
 });
+(0, nats_1.natsConnect)();
 mongoose_1.default.connect(MONGODB_URI).then(function (result) {
     app.listen(PORT, function () {
         console.log('Listening on port 3000 ');

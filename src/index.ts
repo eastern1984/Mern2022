@@ -8,6 +8,7 @@ import ExpressSession from 'express-session';
 import flash from 'connect-flash';
 import session from 'express-session';
 import User from './models/User';
+import { natsConnect } from './utils/nats';
 
 declare module 'express-session' {
   interface SessionData {
@@ -40,6 +41,8 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
 });
+
+natsConnect();
 
 mongoose.connect(MONGODB_URI).then(result => {
   app.listen(PORT, () => {

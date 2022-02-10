@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { makeStyles } from '@mui/styles';
 import { IEntity, IMethod, METHOD_TYPES } from '../../types/interfaces';
-import { CircularProgress, Typography, Button, Stack, Grid, Paper, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import { CircularProgress, Typography, Button, Stack, Paper, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import { Box } from '@mui/system';
+import PostObjects from '../PostObjects/PostObjects';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +33,7 @@ const EntityView = () => {
     const [filter, setFilter] = useState<any>(null);
     const [filterData, setFilterData] = useState<any>(null);
     const [entity, setEntity] = useState<IEntity | null>(null);
-    const [responseForGet, setResponseForGet] = useState<IEntity | null>(null);
+    const [responseForGet, setResponseForGet] = useState<null | any[]>(null);
 
     const sendGetWithFilters = (body: any) => {
         setLoading(true);
@@ -63,7 +64,8 @@ const EntityView = () => {
     return (
         <Box className={classes.root}>
             {loading && <CircularProgress />}
-            {entity &&
+            {responseForGet && id && <PostObjects data={responseForGet} id={id} />}
+            {entity && !responseForGet &&
                 <Stack spacing={2}>
                     <Typography variant="h4" align="center">{entity.name}</Typography>
                     <Typography variant="h5">{entity.description}</Typography>
@@ -81,7 +83,7 @@ const EntityView = () => {
                                     return <div>Unknown type - {typeof field[1]}</div>;
                                 })}
                                 <Stack direction="row" spacing={2} justifyContent="space-between">
-                                    <Button variant="outlined" onClick={() => sendGetWithFilters(filterData)}>Отправить</Button>
+                                    <Button disabled={!filterData} variant="outlined" onClick={() => sendGetWithFilters(filterData)}>Отправить</Button>
                                     <Button color="secondary" variant="contained" onClick={() => navigate('/filterForm/' + id)}>Редактирование</Button>
                                 </Stack>
                             </Stack>

@@ -26,7 +26,36 @@ export const getEntity = async (req: Request, res: Response, next: NextFunction)
 export const postGetFilters = async (req: Request, res: Response, next: NextFunction) => {
     const fields = req.body;
     const natsResult = await getNatsData('Get filter', fields);
-    return res.json({ success: 'OK', data: { ...natsResult } });
+    let tmp;
+
+    if (!Array.isArray(natsResult)) {
+        tmp = [natsResult]
+    }
+    else {
+        tmp = natsResult;
+    }
+    return res.json({ success: 'OK', data: tmp });
+}
+
+export const postObjects = async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+        return res.json({ success: 'Error', message: 'No user' });
+    }
+
+    const entity = await Entity.findById(req.body.id);
+    if (!entity) {
+        return res.json({ success: 'Error', message: 'No entity' });
+    }
+
+    const postMethod = entity.methods.find(v => v.type === METHOD_TYPES.POST);
+    if (!postMethod) {
+        return res.json({ success: 'Error', message: 'No post method' });
+    }
+    
+    const objects = req.body.objects;
+    const result = await getNatsData(postMethod.subscriptionName, objects);
+    return res.json({ success: 'OK', data: result });
 }
 
 export const postEntity = async (req: Request, res: Response, next: NextFunction) => {
