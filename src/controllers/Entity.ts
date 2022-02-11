@@ -5,7 +5,7 @@ import { getNatsData } from '../utils/nats';
 
 export enum METHOD_TYPES { GET, POST }
 
-export const getEntities = async (req: Request, res: Response, next: NextFunction) => {
+export const getEntities = async (req: Request, res: Response) => {
     const user = await User.findById(req.session.userId);
 
     if (!user) {
@@ -13,17 +13,17 @@ export const getEntities = async (req: Request, res: Response, next: NextFunctio
     }
 
     const entities = await Entity.find({ _id: { "$in": user.entities } });
-    return res.json({ success: 'OK', data: entities, "test": process.env.test });
+    return res.json({ success: 'OK', data: entities });
 }
 
-export const getEntity = async (req: Request, res: Response, next: NextFunction) => {
+export const getEntity = async (req: Request, res: Response) => {
     const id = req.params.id;
 
     const entity = await Entity.findById(id);
     return res.json({ success: 'OK', data: entity });
 }
 
-export const postGetFilters = async (req: Request, res: Response, next: NextFunction) => {
+export const postGetFilters = async (req: Request, res: Response) => {
     const fields = req.body;
     const natsResult = await getNatsData('Get filter', fields);
     let tmp;
@@ -37,7 +37,7 @@ export const postGetFilters = async (req: Request, res: Response, next: NextFunc
     return res.json({ success: 'OK', data: tmp });
 }
 
-export const postObjects = async (req: Request, res: Response, next: NextFunction) => {
+export const postObjects = async (req: Request, res: Response) => {
     const user = await User.findById(req.session.userId);
     if (!user) {
         return res.json({ success: 'Error', message: 'No user' });
@@ -58,7 +58,7 @@ export const postObjects = async (req: Request, res: Response, next: NextFunctio
     return res.json({ success: 'OK', data: result });
 }
 
-export const postEntity = async (req: Request, res: Response, next: NextFunction) => {
+export const postEntity = async (req: Request, res: Response) => {
     const id = req.body.id;
     const fields = req.body.fields;
     const entity = await Entity.findById(id);
