@@ -60,15 +60,15 @@ var getNatsData = function (subscriptionName, data) { return __awaiter(void 0, v
 }); };
 exports.getNatsData = getNatsData;
 var natsConnect = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var nc_1, ex_2;
+    var ex_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, (0, ts_nats_1.connect)({ servers: [process.env.NATS_CONNECTION || ""] })];
             case 1:
-                nc_1 = _a.sent();
-                console.log("NATS connected", nc_1);
+                nc = _a.sent();
+                console.log("NATS connected", nc);
                 return [3 /*break*/, 3];
             case 2:
                 ex_2 = _a.sent();

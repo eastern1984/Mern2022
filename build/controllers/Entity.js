@@ -57,7 +57,7 @@ var METHOD_TYPES;
     METHOD_TYPES[METHOD_TYPES["GET"] = 0] = "GET";
     METHOD_TYPES[METHOD_TYPES["POST"] = 1] = "POST";
 })(METHOD_TYPES = exports.METHOD_TYPES || (exports.METHOD_TYPES = {}));
-var getEntities = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var getEntities = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, entities;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -70,12 +70,12 @@ var getEntities = function (req, res, next) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, Entity_1.default.find({ _id: { "$in": user.entities } })];
             case 2:
                 entities = _a.sent();
-                return [2 /*return*/, res.json({ success: 'OK', data: entities, "test": process.env.test })];
+                return [2 /*return*/, res.json({ success: 'OK', data: entities })];
         }
     });
 }); };
 exports.getEntities = getEntities;
-var getEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var getEntity = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, entity;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -89,7 +89,7 @@ var getEntity = function (req, res, next) { return __awaiter(void 0, void 0, voi
     });
 }); };
 exports.getEntity = getEntity;
-var postGetFilters = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var postGetFilters = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var fields, natsResult, tmp;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -109,7 +109,7 @@ var postGetFilters = function (req, res, next) { return __awaiter(void 0, void 0
     });
 }); };
 exports.postGetFilters = postGetFilters;
-var postObjects = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var postObjects = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, entity, postMethod, objects, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -138,7 +138,7 @@ var postObjects = function (req, res, next) { return __awaiter(void 0, void 0, v
     });
 }); };
 exports.postObjects = postObjects;
-var postEntity = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var postEntity = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, fields, entity, newFilterSchema, methods;
     return __generator(this, function (_a) {
         switch (_a.label) {
