@@ -37,19 +37,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.natsConnect = exports.getNatsData = void 0;
-var ts_nats_1 = require("ts-nats");
+var nats_1 = require("nats");
 var nc;
 var getNatsData = function (subscriptionName, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var timeout, response, ex_1;
+    var response, resultData, ex_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                timeout = parseInt(process.env.NATS_TIMEOUT || '10000');
-                return [4 /*yield*/, nc.request(subscriptionName, timeout, JSON.stringify(data))];
+                return [4 /*yield*/, nc.request(subscriptionName, new Uint8Array(data))];
             case 1:
                 response = _a.sent();
-                return [2 /*return*/, JSON.parse(response.data || '{ "data": "no data in response" }')];
+                resultData = new TextDecoder().decode(response.data);
+                return [2 /*return*/, JSON.parse(resultData || '{ "data": "no data in response" }')];
             case 2:
                 ex_1 = _a.sent();
                 console.log("NATS request error - ", ex_1);
@@ -65,7 +65,7 @@ var natsConnect = function () { return __awaiter(void 0, void 0, void 0, functio
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, ts_nats_1.connect)({ servers: [process.env.NATS_CONNECTION || ""] })];
+                return [4 /*yield*/, (0, nats_1.connect)({ servers: [process.env.NATS_CONNECTION || ""] })];
             case 1:
                 nc = _a.sent();
                 console.log("NATS connected", nc);
