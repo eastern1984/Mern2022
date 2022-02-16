@@ -38,7 +38,7 @@ const EntityView = () => {
     const sendGetWithFilters = (body: any) => {
         setLoading(true);
         setFilter(null);
-        fetch('/api/send-get-filters', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        fetch('/api/send-get-filters', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filter: body, id }) })
             .then(response => response.json())
             .then(result => {
                 setResponseForGet(result.data);

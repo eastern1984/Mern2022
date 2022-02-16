@@ -24,8 +24,20 @@ export const getEntity = async (req: Request, res: Response) => {
 }
 
 export const postGetFilters = async (req: Request, res: Response) => {
-    const fields = req.body;
-    const natsResult = await getNatsData('Get filter', fields);
+    const fields = req.body.filter;
+    const id = req.body.id;
+
+    const entity = await Entity.findById(id);
+    if (!entity) {
+        return res.json({ success: 'Error', message: 'No entity' });
+    }
+
+    const getMethod = entity.methods.find(v => v.type === METHOD_TYPES.GET);
+    if (!getMethod) {
+        return res.json({ success: 'Error', message: 'No get method' });
+    }
+
+    const natsResult = await getNatsData(getMethod.subscriptionName, fields);
     let tmp;
 
     if (!Array.isArray(natsResult)) {

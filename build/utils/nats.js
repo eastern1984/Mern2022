@@ -40,19 +40,19 @@ exports.natsConnect = exports.getNatsData = void 0;
 var ts_nats_1 = require("ts-nats");
 var nc;
 var getNatsData = function (subscriptionName, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var timeout, result, ex_1;
+    var timeout, response, ex_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                timeout = parseInt(process.env.NATS_TIMEOUT || '0');
-                return [4 /*yield*/, nc.request(subscriptionName, timeout, data)];
+                timeout = parseInt(process.env.NATS_TIMEOUT || '10000');
+                return [4 /*yield*/, nc.request(subscriptionName, timeout, JSON.stringify(data))];
             case 1:
-                result = _a.sent();
-                return [2 /*return*/, result];
+                response = _a.sent();
+                return [2 /*return*/, JSON.parse(response.data || '{ "data": "no data in response" }')];
             case 2:
                 ex_1 = _a.sent();
-                console.log("NATS connect error");
+                console.log("NATS request error - ", ex_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/, { test: 'data' }];
         }

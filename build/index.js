@@ -9,7 +9,7 @@ var MONGODB_URI = process.env.MONGO_DB_CONNECTION || "";
 var PORT = process.env.SERVER_PORT;
 mongoose_1.default.connect(MONGODB_URI).then(function (result) {
     app_1.app.listen(PORT, function () {
-        console.log('Listening on port 3000 ');
+        console.log('Listening on port ' + process.env.SERVER_PORT);
     });
 }).catch(function (err) {
     console.log('Mongo connect error', err);

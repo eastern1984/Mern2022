@@ -90,13 +90,24 @@ var getEntity = function (req, res) { return __awaiter(void 0, void 0, void 0, f
 }); };
 exports.getEntity = getEntity;
 var postGetFilters = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var fields, natsResult, tmp;
+    var fields, id, entity, getMethod, natsResult, tmp;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                fields = req.body;
-                return [4 /*yield*/, (0, nats_1.getNatsData)('Get filter', fields)];
+                fields = req.body.filter;
+                id = req.body.id;
+                return [4 /*yield*/, Entity_1.default.findById(id)];
             case 1:
+                entity = _a.sent();
+                if (!entity) {
+                    return [2 /*return*/, res.json({ success: 'Error', message: 'No entity' })];
+                }
+                getMethod = entity.methods.find(function (v) { return v.type === METHOD_TYPES.GET; });
+                if (!getMethod) {
+                    return [2 /*return*/, res.json({ success: 'Error', message: 'No get method' })];
+                }
+                return [4 /*yield*/, (0, nats_1.getNatsData)(getMethod.subscriptionName, fields)];
+            case 2:
                 natsResult = _a.sent();
                 if (!Array.isArray(natsResult)) {
                     tmp = [natsResult];
